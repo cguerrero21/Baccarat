@@ -7,4 +7,12 @@ public class Card {
         suite = theSuite;
         value = theValue;
     }
+
+    public int getValue(){
+        return value;
+    }
+
+    public String getSuite(){
+        return suite;
+    }
 }
