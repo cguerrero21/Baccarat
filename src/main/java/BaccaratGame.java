@@ -1,16 +1,11 @@
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
 import javafx.application.Application;
-
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 public class BaccaratGame extends Application {
@@ -24,36 +19,36 @@ public class BaccaratGame extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		primaryStage.setTitle("Welcome to JavaFX");
-		
-		 Rectangle rect = new Rectangle (100, 40, 100, 100);
-	     rect.setArcHeight(50);
-	     rect.setArcWidth(50);
-	     rect.setFill(Color.VIOLET);
+		primaryStage.setTitle("Welcome to Baccarat");
 
-	     RotateTransition rt = new RotateTransition(Duration.millis(5000), rect);
-	     rt.setByAngle(270);
-	     rt.setCycleCount(4);
-	     rt.setAutoReverse(true);
-	     SequentialTransition seqTransition = new SequentialTransition (
-	         new PauseTransition(Duration.millis(500)),
-	         rt
-	     );
-	     seqTransition.play();
-	     
-	     FadeTransition ft = new FadeTransition(Duration.millis(5000), rect);
-	     ft.setFromValue(1.0);
-	     ft.setToValue(0.3);
-	     ft.setCycleCount(4);
-	     ft.setAutoReverse(true);
+		Image background= new Image("file:baccarat-table-layout.jpg");
+		Group root = new Group();
 
-	     ft.play();
-	     BorderPane root = new BorderPane();
-	     root.setCenter(rect);
-	     
-	     Scene scene = new Scene(root, 700,700);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+		ImageView mv = new ImageView(background);
+		mv.setPreserveRatio(true);
+		mv.fitWidthProperty().bind(primaryStage.widthProperty());
+		mv.fitHeightProperty().bind(primaryStage.heightProperty());
+		root.getChildren().add(mv);
+
+
+		Button deal = new Button("DEAL");
+		deal.setPrefWidth(150);
+		deal.setPrefHeight(75);
+		Button clear = new Button("Clear Board");
+		clear.setPrefWidth(150);
+		clear.setPrefHeight(75);
+
+		StackPane stackPane = new StackPane();
+		stackPane.getChildren().addAll(mv, clear, deal);
+		StackPane.setMargin(clear, new javafx.geometry.Insets(-475, 0, 0, -550));
+		StackPane.setMargin(deal, new javafx.geometry.Insets(-475, -550, 0, 0));
+
+
+
+		Scene scene = new Scene(stackPane, 1200, 690);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
 	}
 
 }
