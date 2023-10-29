@@ -10,12 +10,15 @@ import javafx.stage.Stage;
 
 public class BaccaratGame extends Application {
 
+
+
+
+
+	//----------------------------------------------------------------------
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
 	}
-
-	//feel free to remove the starter code from this method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -30,7 +33,6 @@ public class BaccaratGame extends Application {
 		mv.fitHeightProperty().bind(primaryStage.heightProperty());
 		root.getChildren().add(mv);
 
-
 		Button deal = new Button("DEAL");
 		deal.setPrefWidth(150);
 		deal.setPrefHeight(75);
@@ -43,12 +45,8 @@ public class BaccaratGame extends Application {
 		StackPane.setMargin(clear, new javafx.geometry.Insets(-475, 0, 0, -550));
 		StackPane.setMargin(deal, new javafx.geometry.Insets(-475, -550, 0, 0));
 
-
-
 		Scene scene = new Scene(stackPane, 1200, 690);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
 	}
-
 }
