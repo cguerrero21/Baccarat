@@ -57,6 +57,10 @@ public class BaccaratGame extends Application {
 		layout.setTop(menuBar);
 
 		MenuItem exit = new MenuItem("Exit");
+		exit.setOnAction(event -> {
+			System.exit(0);
+				});
+
 		MenuItem fresh = new MenuItem("Fresh Start");
 		options.getItems().addAll(exit, fresh);
 
@@ -69,13 +73,13 @@ public class BaccaratGame extends Application {
 		Button deal = new Button("DEAL");
 		deal.setPrefWidth(150);
 		deal.setPrefHeight(75);
-		Button clear = new Button("Clear Board");
-		clear.setPrefWidth(150);
-		clear.setPrefHeight(75);
+		//Button clear = new Button("Clear Board");
+		//clear.setPrefWidth(150);
+		//clear.setPrefHeight(75);
 
 		StackPane stackPane = new StackPane();
-		stackPane.getChildren().addAll(mv, clear, deal);
-		StackPane.setMargin(clear, new javafx.geometry.Insets(-475, 0, 0, -550));
+		stackPane.getChildren().addAll(mv, deal);
+		//StackPane.setMargin(clear, new javafx.geometry.Insets(-475, 0, 0, -550));
 		StackPane.setMargin(deal, new javafx.geometry.Insets(-475, -550, 0, 0));
 
 		layout.setCenter(stackPane);
