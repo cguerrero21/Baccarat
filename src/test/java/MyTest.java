@@ -11,13 +11,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 class DealerTest {
+
 	@BeforeEach
 	void init(){
-		BaccaratDealer dealer = new BaccaratDealer();
-		BaccaratGameLogic logic = new BaccaratGameLogic();
+		BaccaratDealer thedealer = new BaccaratDealer();
+		BaccaratGameLogic gameLogic = new BaccaratGameLogic();
 	}
-
-	
 
 	@Test // Card constructor
     void testCardConstructor(){
