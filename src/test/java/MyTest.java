@@ -33,59 +33,59 @@ class DealerTest {
 
 	@Test // BaccaratDealer constructor
 	void testBaccaratDealerConstructor(){
-		assertNotNull(dealer.deck);
+		assertNotNull(thedealer.deck);
 	}
 
 	@Test // BaccaratDealer -> generateDeck()
 	void testGenerateDeck1(){
-		dealer.generateDeck();
+		thedealer.generateDeck();
 
-		assertEquals(1,dealer.deck.get(0).getValue(), "wrong card value");
-		assertEquals("Spade",dealer.deck.get(0).getSuite(),"wrong card suite");
+		assertEquals(1,thedealer.deck.get(0).getValue(), "wrong card value");
+		assertEquals("Spade",thedealer.deck.get(0).getSuite(),"wrong card suite");
 
-		assertEquals(2,dealer.deck.get(1).getValue(), "wrong card value");
-		assertEquals("Spade",dealer.deck.get(1).getSuite(),"wrong card suite");
+		assertEquals(2,thedealer.deck.get(1).getValue(), "wrong card value");
+		assertEquals("Spade",thedealer.deck.get(1).getSuite(),"wrong card suite");
 
-		assertEquals(13,dealer.deck.get(12).getValue(), "wrong card value");
-		assertEquals("Spade",dealer.deck.get(12).getSuite(),"wrong card suite");
+		assertEquals(13,thedealer.deck.get(12).getValue(), "wrong card value");
+		assertEquals("Spade",thedealer.deck.get(12).getSuite(),"wrong card suite");
 
-		assertEquals(1,dealer.deck.get(13).getValue(), "wrong card value");
-		assertEquals("Clubs",dealer.deck.get(13).getSuite(),"wrong card suite");
+		assertEquals(1,thedealer.deck.get(13).getValue(), "wrong card value");
+		assertEquals("Clubs",thedealer.deck.get(13).getSuite(),"wrong card suite");
 
-		assertEquals(2,dealer.deck.get(14).getValue(), "wrong card value");
-		assertEquals("Clubs",dealer.deck.get(14).getSuite(),"wrong card suite");
+		assertEquals(2,thedealer.deck.get(14).getValue(), "wrong card value");
+		assertEquals("Clubs",thedealer.deck.get(14).getSuite(),"wrong card suite");
 
-		assertEquals(13,dealer.deck.get(25).getValue(), "wrong card value");
-		assertEquals("Clubs",dealer.deck.get(25).getSuite(),"wrong card suite");
+		assertEquals(13,thedealer.deck.get(25).getValue(), "wrong card value");
+		assertEquals("Clubs",thedealer.deck.get(25).getSuite(),"wrong card suite");
 	}
 
 	@Test // BaccaratDealer -> generateDeck()
 	void testGenerateDeck2(){
-		dealer.generateDeck();
+		thedealer.generateDeck();
 
-		assertEquals(1,dealer.deck.get(26).getValue(), "wrong card value");
-		assertEquals("Diamond",dealer.deck.get(26).getSuite(),"wrong card suite");
+		assertEquals(1,thedealer.deck.get(26).getValue(), "wrong card value");
+		assertEquals("Diamond",thedealer.deck.get(26).getSuite(),"wrong card suite");
 
-		assertEquals(2,dealer.deck.get(27).getValue(), "wrong card value");
-		assertEquals("Diamond",dealer.deck.get(27).getSuite(),"wrong card suite");
+		assertEquals(2,thedealer.deck.get(27).getValue(), "wrong card value");
+		assertEquals("Diamond",thedealer.deck.get(27).getSuite(),"wrong card suite");
 
-		assertEquals(13,dealer.deck.get(38).getValue(), "wrong card value");
-		assertEquals("Diamond",dealer.deck.get(38).getSuite(),"wrong card suite");
+		assertEquals(13,thedealer.deck.get(38).getValue(), "wrong card value");
+		assertEquals("Diamond",thedealer.deck.get(38).getSuite(),"wrong card suite");
 
-		assertEquals(1,dealer.deck.get(39).getValue(), "wrong card value");
-		assertEquals("Heart",dealer.deck.get(39).getSuite(),"wrong card suite");
+		assertEquals(1,thedealer.deck.get(39).getValue(), "wrong card value");
+		assertEquals("Heart",thedealer.deck.get(39).getSuite(),"wrong card suite");
 
-		assertEquals(2,dealer.deck.get(40).getValue(), "wrong card value");
-		assertEquals("Heart",dealer.deck.get(40).getSuite(),"wrong card suite");
+		assertEquals(2,thedealer.deck.get(40).getValue(), "wrong card value");
+		assertEquals("Heart",thedealer.deck.get(40).getSuite(),"wrong card suite");
 		
-		assertEquals(13,dealer.deck.get(51).getValue(), "wrong card value");
-		assertEquals("Heart",dealer.deck.get(51).getSuite(),"wrong card suite");
+		assertEquals(13,thedealer.deck.get(51).getValue(), "wrong card value");
+		assertEquals("Heart",thedealer.deck.get(51).getSuite(),"wrong card suite");
 	}
 
 	@Test // BaccaratDealer -> dealHand()
 	void testDealHand1(){
-		dealer.generateDeck();
-		ArrayList<Card> hand = dealer.dealHand();
+		thedealer.generateDeck();
+		ArrayList<Card> hand = thedealer.dealHand();
 
 		assertEquals(1,hand.get(0).getValue(), "wrong card value");
 		assertEquals("Heart",hand.get(0).getSuite(),"wrong card suite");
@@ -95,10 +95,10 @@ class DealerTest {
 
 	@Test // BaccaratDealer -> dealHand()
 	void testDealHand2(){
-		dealer.generateDeck();
-		dealer.deck.remove(0);
-		dealer.deck.remove(0);
-		ArrayList<Card> hand = dealer.dealHand();
+		thedealer.generateDeck();
+		thedealer.deck.remove(0);
+		thedealer.deck.remove(0);
+		ArrayList<Card> hand = thedealer.dealHand();
 
 
 		assertEquals(3,hand.get(0).getValue(), "wrong card value");
@@ -109,9 +109,9 @@ class DealerTest {
 
 	@Test
 	void testDrawOne1(){
-		dealer.generateDeck();
+		thedealer.generateDeck();
 
-		Card card = dealer.drawOne();
+		Card card = thedealer.drawOne();
 
 		assertEquals(1,card.getValue(), "wrong card value");
 		assertEquals("Heart",card.getSuite(),"wrong card suite");
@@ -119,10 +119,10 @@ class DealerTest {
 
 	@Test
 	void testDrawOne2(){
-		dealer.generateDeck();
-		dealer.deck.remove(0);
+		thedealer.generateDeck();
+		thedealer.deck.remove(0);
 
-		Card card = dealer.drawOne();
+		Card card = thedealer.drawOne();
 
 		assertEquals(2,card.getValue(), "wrong card value");
 		assertEquals("Heart",card.getSuite(),"wrong card suite");
@@ -130,56 +130,56 @@ class DealerTest {
 
 	@Test
 	void testShuffleDeck1(){
-		dealer.generateDeck();
-		Card cardTemp1 = dealer.deck.get(0);
+		thedealer.generateDeck();
+		Card cardTemp1 = thedealer.deck.get(0);
 
 		assertEquals(1,cardTemp1.getValue(), "wrong card value");
 		assertEquals("Heart",cardTemp1.getSuite(),"wrong card suite");
 
-		dealer.shuffleDeck();
-		Card cardTemp2 = dealer.deck.get(0);
+		thedealer.shuffleDeck();
+		Card cardTemp2 = thedealer.deck.get(0);
 
 		assertNotSame(cardTemp1,cardTemp2, "cards same, CHANCE THAT CARDS SAME POSSIBLE");
 	}
 
 	@Test
 	void testShuffleDeck2(){
-		dealer.generateDeck();
-		dealer.deck.remove(0);
-		Card cardTemp1 = dealer.deck.get(0);
+		thedealer.generateDeck();
+		thedealer.deck.remove(0);
+		Card cardTemp1 = thedealer.deck.get(0);
 
 		assertEquals(2,cardTemp1.getValue(), "wrong card value");
 		assertEquals("Heart",cardTemp1.getSuite(),"wrong card suite");
 
-		dealer.shuffleDeck();
-		Card cardTemp2 = dealer.deck.get(0);
+		thedealer.shuffleDeck();
+		Card cardTemp2 = thedealer.deck.get(0);
 
 		assertNotSame(cardTemp1,cardTemp2, "cards same");
 	}
 
 	@Test
 	void testDeckSize1(){
-		dealer.generateDeck();
+		thedealer.generateDeck();
 
-		assertEquals(52, dealer.deckSize(),"wrong deck size");
+		assertEquals(52, thedealer.deckSize(),"wrong deck size");
 
-		dealer.deck.remove(0);
+		thedealer.deck.remove(0);
 
-		assertEquals(51, dealer.deckSize(),"wrong deck size");
+		assertEquals(51, thedealer.deckSize(),"wrong deck size");
 	}
 
 	@Test
 	void testDeckSize2(){
-		dealer.generateDeck();
+		thedealer.generateDeck();
 
-		assertEquals(52, dealer.deckSize(),"wrong deck size");
+		assertEquals(52, thedealer.deckSize(),"wrong deck size");
 
-		dealer.deck.remove(0);
-		dealer.deck.remove(0);
-		dealer.deck.remove(0);
-		dealer.deck.remove(0);
+		thedealer.deck.remove(0);
+		thedealer.deck.remove(0);
+		thedealer.deck.remove(0);
+		thedealer.deck.remove(0);
 
-		assertEquals(48, dealer.deckSize(),"wrong deck size");
+		assertEquals(48, thedealer.deckSize(),"wrong deck size");
 	}
 
 	// BaccaratGameLogic tests
@@ -201,7 +201,7 @@ class DealerTest {
 		hand2.addAll(card4,card5,card6);
 	
 
-		String winner = logic.whoWon(hand1,hand2);
+		String winner = gameLogic.whoWon(hand1,hand2);
 
 		assertEquals("Banker",winner,"wrong winner");
 
@@ -221,7 +221,7 @@ class DealerTest {
 		hand2.add(card4);
 		hand2.add(card5);
 
-		String winner = logic.whoWon(hand1,hand2);
+		String winner = gameLogic.whoWon(hand1,hand2);
 
 		assertEquals("Draw",winner,"wrong winner");
 	}
@@ -243,8 +243,8 @@ class DealerTest {
 		hand2.add(card5);
 		hand2.add(card6);
 
-		assertEquals(3,logic.handTotal(hand1), "wrong hand total");
-		assertEquals(2,logic.handTotal(hand2), "wrong hand total");
+		assertEquals(3,gameLogic.handTotal(hand1), "wrong hand total");
+		assertEquals(2,gameLogic.handTotal(hand2), "wrong hand total");
 	}
 
 	@Test // BaccaratGameLogic -> handTotal()
@@ -262,8 +262,8 @@ class DealerTest {
 		hand2.add(card4);
 		hand2.add(card5);
 
-		assertEquals(7,logic.handTotal(hand1), "wrong hand total");
-		assertEquals(7,logic.handTotal(hand2), "wrong hand total");
+		assertEquals(7,gameLogic.handTotal(hand1), "wrong hand total");
+		assertEquals(7,gameLogic.handTotal(hand2), "wrong hand total");
 	}
 
 	@Test // BaccaratGameLogic -> evaluateBankerDraw()
@@ -283,9 +283,9 @@ class DealerTest {
 		hand3.add(card1); // hand3: 6
 		hand3.add(card6);
 
-		assertEquals(true,logic.evaluateBankerDraw(hand1,card4),"should not draw");
-		assertEquals(true,logic.evaluateBankerDraw(hand2,card5),"should draw");
-		assertEquals(false,logic.evaluateBankerDraw(hand3,card5),"should draw");
+		assertEquals(true,gameLogic.evaluateBankerDraw(hand1,card4),"should not draw");
+		assertEquals(true,gameLogic.evaluateBankerDraw(hand2,card5),"should draw");
+		assertEquals(false,gameLogic.evaluateBankerDraw(hand3,card5),"should draw");
 	}
 
 	@Test // BaccaratGameLogic -> evaluateBankerDraw()
@@ -306,9 +306,9 @@ class DealerTest {
 		hand3.add(card1); // hand3: 3, card 5 = 6
 		hand3.add(card6);
 
-		assertEquals(true,logic.evaluateBankerDraw(hand1,card7),"should draw");
-		assertEquals(false,logic.evaluateBankerDraw(hand2,card5),"should not draw");
-		assertEquals(true,logic.evaluateBankerDraw(hand3,card5),"should draw");
+		assertEquals(true,gameLogic.evaluateBankerDraw(hand1,card7),"should draw");
+		assertEquals(false,gameLogic.evaluateBankerDraw(hand2,card5),"should not draw");
+		assertEquals(true,gameLogic.evaluateBankerDraw(hand3,card5),"should draw");
 	}
 
 	@Test // BaccaratGameLogic -> evaluatePlayerDraw()
@@ -324,8 +324,8 @@ class DealerTest {
 		hand2.add(card4);
 		hand2.add(card5);
 
-		assertEquals(true,logic.evaluatePlayerDraw(hand1),"should draw another card");
-		assertEquals(false,logic.evaluatePlayerDraw(hand2),"should not draw another card");
+		assertEquals(true,gameLogic.evaluatePlayerDraw(hand1),"should draw another card");
+		assertEquals(false,gameLogic.evaluatePlayerDraw(hand2),"should not draw another card");
 	}
 
 	@Test // BaccaratGameLogic -> evaluatePlayerDraw()
@@ -341,8 +341,8 @@ class DealerTest {
 		hand2.add(card4);
 		hand2.add(card5);
 
-		assertEquals(true,logic.evaluatePlayerDraw(hand1),"should draw another card");
-		assertEquals(true,logic.evaluatePlayerDraw(hand2),"should draw another card");
+		assertEquals(true,gameLogic.evaluatePlayerDraw(hand1),"should draw another card");
+		assertEquals(true,gameLogic.evaluatePlayerDraw(hand2),"should draw another card");
 	}
 
 
