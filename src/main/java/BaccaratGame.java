@@ -29,6 +29,8 @@ public class BaccaratGame extends Application {
 	private int bankerTot;
 	private String winner;
 	private GridPane cardGrid= new GridPane();
+	private Label playerTotalLabel;
+	private Label bankerTotalLabel;
 
 	public BaccaratGame(){
 		playerHand = new ArrayList<Card>();
@@ -55,7 +57,7 @@ public class BaccaratGame extends Application {
 
 			StackPane playerStackPane = new StackPane();
 			playerStackPane.getChildren().addAll(playerRectangle, playerLabel);
-			cardGrid.add(playerStackPane, i, 0);
+			cardGrid.add(playerStackPane, 0, i);
 			GridPane.setHalignment(playerStackPane, HPos.CENTER);
 
 			// Similar updates for the banker's hand
@@ -65,9 +67,12 @@ public class BaccaratGame extends Application {
 
 			StackPane bankerStackPane = new StackPane();
 			bankerStackPane.getChildren().addAll(bankerRectangle, bankerLabel);
-			cardGrid.add(bankerStackPane, i, 1);
+			cardGrid.add(bankerStackPane, 1, i);
 			GridPane.setHalignment(bankerStackPane, HPos.CENTER);
 		}
+
+		playerTotalLabel.setText("Player Total: " + playerTot);
+		bankerTotalLabel.setText("Banker Total: " + bankerTot);
 	}
 	public double evaluateWinnings(){
 		double winnings = 0;
@@ -158,10 +163,10 @@ public class BaccaratGame extends Application {
 		cardGrid.setHgap(30);
 		cardGrid.setVgap(20);
 
-		Label playerTotalLabel = new Label("Player Total: " + playerTot);
+		playerTotalLabel = new Label("Player Total: " + playerTot);
 		playerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
 
-		Label bankerTotalLabel = new Label("Banker Total: " + bankerTot);
+		bankerTotalLabel = new Label("Banker Total: " + bankerTot);
 		bankerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
 
 		for (int i = 0; i < 3; i++) {
@@ -220,11 +225,9 @@ public class BaccaratGame extends Application {
 			theDealer.shuffleDeck();
 			playerHand = theDealer.dealHand();
 			bankerHand = theDealer.dealHand();
+			playerTot = gameLogic.handTotal(playerHand);
+			bankerTot = gameLogic.handTotal(bankerHand);
 			updateCards();
-
-//			playerTot = gameLogic.handTotal(playerHand);
-//			bankerTot = gameLogic.handTotal(bankerHand);
-
 			rounds.set(rounds.get() + 1);
 		});
 		Button playerB = new Button("Player");
