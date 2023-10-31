@@ -105,7 +105,7 @@ public class BaccaratGame extends Application {
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Baccarat by: Carlos Guerrero");
+		primaryStage.setTitle("Baccarat by: Carlos Guerrero and Tyler Chow");
 
 		Color customColor = Color.web("#4E6A54");
 		BorderPane layout = new BorderPane();
