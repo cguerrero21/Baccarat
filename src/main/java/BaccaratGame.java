@@ -31,6 +31,7 @@ public class BaccaratGame extends Application {
 	private GridPane cardGrid= new GridPane();
 	private Label playerTotalLabel;
 	private Label bankerTotalLabel;
+	private ArrayList<Card> addCard;
 
 	public BaccaratGame(){
 		playerHand = new ArrayList<Card>();
@@ -45,35 +46,42 @@ public class BaccaratGame extends Application {
 		winner = "";
 		theDealer.generateDeck();
 	}
+
 	public void updateCards() {
-		for (int i = 0; i < 2; i++) {
-			Card playerCard = playerHand.get(i);
-			Card bankerCard = bankerHand.get(i);
+		for (int i = 0; i < 3; i++) {
+			Card playerCard = i < playerHand.size() ? playerHand.get(i) : null;
+			Card bankerCard = i < bankerHand.size() ? bankerHand.get(i) : null;
 
-			// Update UI with the card values
-			Rectangle playerRectangle = new Rectangle(125, 35, Color.WHITE); // Change to the color you want
-			Label playerLabel = new Label(playerCard.getSuite() + " " + playerCard.getValue());
-			playerLabel.setStyle("-fx-font-size: 12; -fx-text-fill: black;");
+			if (playerCard != null) {
+				Rectangle playerRectangle = new Rectangle(125, 35, Color.WHITE);
+				Label playerLabel = new Label(playerCard.getSuite() + " " + playerCard.getValue());
+				playerLabel.setStyle("-fx-font-size: 12; -fx-text-fill: black;");
 
-			StackPane playerStackPane = new StackPane();
-			playerStackPane.getChildren().addAll(playerRectangle, playerLabel);
-			cardGrid.add(playerStackPane, 0, i);
-			GridPane.setHalignment(playerStackPane, HPos.CENTER);
+				StackPane playerStackPane = new StackPane();
+				playerStackPane.getChildren().addAll(playerRectangle, playerLabel);
+				cardGrid.add(playerStackPane, 0, i);
+				GridPane.setHalignment(playerStackPane, HPos.CENTER);
+			}
 
-			// Similar updates for the banker's hand
-			Rectangle bankerRectangle = new Rectangle(125, 35, Color.WHITE); // Change to the color you want
-			Label bankerLabel = new Label(bankerCard.getSuite() + " " + bankerCard.getValue());
-			bankerLabel.setStyle("-fx-font-size: 12; -fx-text-fill: black;");
+			if (bankerCard != null) {
+				Rectangle bankerRectangle = new Rectangle(125, 35, Color.WHITE);
+				Label bankerLabel = new Label(bankerCard.getSuite() + " " + bankerCard.getValue());
+				bankerLabel.setStyle("-fx-font-size: 12; -fx-text-fill: black;");
 
-			StackPane bankerStackPane = new StackPane();
-			bankerStackPane.getChildren().addAll(bankerRectangle, bankerLabel);
-			cardGrid.add(bankerStackPane, 1, i);
-			GridPane.setHalignment(bankerStackPane, HPos.CENTER);
+				StackPane bankerStackPane = new StackPane();
+				bankerStackPane.getChildren().addAll(bankerRectangle, bankerLabel);
+				cardGrid.add(bankerStackPane, 1, i);
+				GridPane.setHalignment(bankerStackPane, HPos.CENTER);
+			}
 		}
+
+		playerTot = gameLogic.handTotal(playerHand);
+		bankerTot = gameLogic.handTotal(bankerHand);
 
 		playerTotalLabel.setText("Player Total: " + playerTot);
 		bankerTotalLabel.setText("Banker Total: " + bankerTot);
 	}
+
 	public double evaluateWinnings(){
 		double winnings = 0;
 		String winner = gameLogic.whoWon(bankerHand,playerHand);
@@ -173,7 +181,7 @@ public class BaccaratGame extends Application {
 			for (int j = 0; j < 2; j++) {
 				if (i < 2) {
 					List<Card> cardList = j == 0 ? playerHand : bankerHand;
-					if (!cardList.isEmpty()) {
+					if (!cardList.isEmpty() && cardList.size() > i) {
 						Card currentCard = cardList.get(i);
 						Rectangle rect = new Rectangle(125, 35, Color.WHITE);
 						StackPane stackPane = new StackPane(rect);
@@ -192,17 +200,24 @@ public class BaccaratGame extends Application {
 						GridPane.setHalignment(stackPane, HPos.CENTER);
 					}
 				} else {
-					StackPane playerStackPane = new StackPane(playerTotalLabel);
-					StackPane bankerStackPane = new StackPane(bankerTotalLabel);
+					Rectangle rect = new Rectangle(125, 35, Color.WHITE);
+					StackPane stackPane = new StackPane(rect);
 
-					cardGrid.add(playerStackPane, 0, 2);
-					cardGrid.add(bankerStackPane, 1, 2);
-
-					GridPane.setHalignment(playerStackPane, HPos.LEFT);
-					GridPane.setHalignment(bankerStackPane, HPos.LEFT);
+					cardGrid.add(stackPane, j, i);
+					GridPane.setHalignment(stackPane, HPos.CENTER);
 				}
 			}
 		}
+
+		playerTotalLabel = new Label("Player Total: " + playerTot);
+		playerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+		cardGrid.add(playerTotalLabel, 0, 3);
+		GridPane.setHalignment(playerTotalLabel, HPos.LEFT);
+
+		bankerTotalLabel = new Label("Banker Total: " + bankerTot);
+		bankerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+		cardGrid.add(bankerTotalLabel, 1, 3);
+		GridPane.setHalignment(bankerTotalLabel, HPos.LEFT);
 
 		Label outcomeLabel = new Label("________ wins \n Win or loss message here");
 		outcomeLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
@@ -228,6 +243,18 @@ public class BaccaratGame extends Application {
 			playerTot = gameLogic.handTotal(playerHand);
 			bankerTot = gameLogic.handTotal(bankerHand);
 			updateCards();
+
+			if (gameLogic.evaluatePlayerDraw(playerHand)){
+				addCard = theDealer.drawOne();
+				playerHand.addAll(addCard);
+			}
+			if (gameLogic.evaluateBankerDraw(bankerHand, addCard.get(0))){
+				ArrayList<Card> banCard = theDealer.drawOne();
+				bankerHand.addAll(banCard);
+			}
+
+			updateCards();
+
 			rounds.set(rounds.get() + 1);
 		});
 		Button playerB = new Button("Player");

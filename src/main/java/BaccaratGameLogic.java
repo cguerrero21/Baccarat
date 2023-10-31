@@ -32,7 +32,7 @@ public class BaccaratGameLogic {
             }
         }
         if (total > 9){
-            total = total - 10;
+            total = total % 10;
         }
         return total;
     }
