@@ -1,17 +1,18 @@
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class BaccaratGame extends Application {
@@ -22,20 +23,41 @@ public class BaccaratGame extends Application {
 	private BaccaratGameLogic gameLogic;
 	private double currentBet;
 	private double totalWinnings;
+	private String betOn;
+	private IntegerProperty rounds;
+	private int playerTot;
+	private int bankerTot;
+	private String winner;
 
 	public BaccaratGame(){
 		playerHand = new ArrayList<Card>();
 		bankerHand = new ArrayList<Card>();
 		theDealer = new BaccaratDealer();
 		gameLogic = new BaccaratGameLogic();
+		currentBet = 0.0;
+		totalWinnings = 0.0;
+		playerTot = 0;
+		bankerTot = 0;
+		rounds = new SimpleIntegerProperty(0);
+		winner = "";
+		theDealer.generateDeck();
 	}
 
 	public double evaluateWinnings(){
-
-		return 0;
+		double winnings = 0;
+		String winner = gameLogic.whoWon(bankerHand,playerHand);
+		if(betOn.equals(winner) && winner.equals("Banker")){
+			double commission = 0.05 * currentBet;
+			winnings += (currentBet - commission);
+		} else if(betOn.equals(winner) && winner.equals("Draw")){
+			winnings += currentBet*8;
+		} else if(betOn .equals(winner) && winner.equals("Player")) {
+			winnings += currentBet;
+		} else if(!betOn.equals(winner)){ // lost the bet
+			winnings -= currentBet;
+		}
+		return winnings;
 	}
-
-
 
 	//----------------------------------------------------------------------
 	public static void main(String[] args) {
@@ -44,47 +66,188 @@ public class BaccaratGame extends Application {
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		primaryStage.setTitle("Welcome to Baccarat");
+		primaryStage.setTitle("Baccarat by: Carlos Guerrero");
 
-		Image background= new Image("file:baccarat-table-layout.jpg");
-		Group root = new Group();
-
+		Color customColor = Color.web("#4E6A54");
 		BorderPane layout = new BorderPane();
+		BackgroundFill backgroundFill = new BackgroundFill(customColor, null, null);
+		Background background = new Background(backgroundFill);
+		layout.setBackground(background);
+
+		TextField betAmount = new TextField();
+		betAmount.setPromptText("Enter your bet");
+		betAmount.setPrefWidth(200);
+		betAmount.setPrefHeight(30);
+		betAmount.setAlignment(Pos.CENTER);
+		betAmount.setOnAction(event -> {
+			try {
+				currentBet = Double.parseDouble(betAmount.getText());
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter a valid number.");
+			}
+		});
+
 		MenuBar menuBar = new MenuBar();
 		Menu options = new Menu("Options");
 		menuBar.getMenus().add(options);
-		layout.setTop(menuBar);
 
 		MenuItem exit = new MenuItem("Exit");
-		exit.setOnAction(event -> {
-			System.exit(0);
-				});
+		exit.setOnAction(event -> System.exit(0));
 
 		MenuItem fresh = new MenuItem("Fresh Start");
 		options.getItems().addAll(exit, fresh);
 
-		ImageView mv = new ImageView(background);
-		mv.setPreserveRatio(true);
-		mv.fitWidthProperty().bind(primaryStage.widthProperty());
-		mv.fitHeightProperty().bind(primaryStage.heightProperty());
-		root.getChildren().add(mv);
+		VBox topBox = new VBox(10);
+		topBox.setAlignment(Pos.CENTER);
+		topBox.setPadding(new Insets(10));
+
+		Label title = new Label("Welcome to Baccarat");
+		Label roundCount = new Label("Current rounds: " + rounds);
+		Label totWinnings = new Label("Total winnings: "+ totalWinnings);
+		totWinnings.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+		roundCount.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+		roundCount.textProperty().bind(rounds.asString("Current rounds: %d"));
+		title.setStyle("-fx-font-size: 30; -fx-text-fill: white;");
+		HBox titleBox = new HBox(10);
+		titleBox.setAlignment(Pos.CENTER);
+		HBox.setMargin(roundCount, new Insets(0, 100, 0, 0));
+		HBox.setMargin(totWinnings, new Insets(0, 0, 0, 100));
+		titleBox.getChildren().addAll(roundCount, title, totWinnings);
+		topBox.getChildren().addAll(menuBar, titleBox);
+		layout.setTop(topBox);
+
+		Label center = new Label("Player          Banker");
+		center.setStyle("-fx-font-size: 30; -fx-text-fill: white;");
+		HBox centerBox = new HBox(10);
+		centerBox.setAlignment(Pos.CENTER);
+		centerBox.getChildren().add(center);
+
+
+		VBox botBox = new VBox(10);
+		botBox.setAlignment(Pos.CENTER);
+		botBox.setPadding(new Insets(10));
+
+		GridPane cardGrid = new GridPane();
+		cardGrid.setAlignment(Pos.CENTER);
+		cardGrid.setHgap(30);
+		cardGrid.setVgap(20);
+
+		Label playerTotalLabel = new Label("Player Total: " + playerTot);
+		playerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+
+		Label bankerTotalLabel = new Label("Banker Total: " + bankerTot);
+		bankerTotalLabel.setStyle("-fx-font-size: 15; -fx-text-fill: white;");
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (i < 2) {
+					List<Card> cardList = j == 0 ? playerHand : bankerHand;
+					if (!cardList.isEmpty()) {
+						Card currentCard = cardList.get(i);
+						Rectangle rect = new Rectangle(125, 35, Color.WHITE);
+						StackPane stackPane = new StackPane(rect);
+
+						Label label = new Label(currentCard.getSuite() + " " + currentCard.getValue());
+						label.setStyle("-fx-font-size: 12; -fx-text-fill: black;");
+
+						stackPane.getChildren().add(label);
+						cardGrid.add(stackPane, j, i);
+						GridPane.setHalignment(stackPane, HPos.CENTER);
+					} else {
+						Rectangle rect = new Rectangle(125, 35, Color.WHITE);
+						StackPane stackPane = new StackPane(rect);
+
+						cardGrid.add(stackPane, j, i);
+						GridPane.setHalignment(stackPane, HPos.CENTER);
+					}
+				} else {
+					StackPane playerStackPane = new StackPane(playerTotalLabel);
+					StackPane bankerStackPane = new StackPane(bankerTotalLabel);
+
+					cardGrid.add(playerStackPane, 0, 2);
+					cardGrid.add(bankerStackPane, 1, 2);
+
+					GridPane.setHalignment(playerStackPane, HPos.LEFT);
+					GridPane.setHalignment(bankerStackPane, HPos.LEFT);
+				}
+			}
+		}
+
+//		for (int i = 0; i < 4; i++) {
+//			for (int j = 0; j < 2; j++) {
+//				if (i < 3) {
+//					Rectangle rect = new Rectangle(125, 35, Color.WHITE);
+//					StackPane stackPane = new StackPane(rect);
+//					cardGrid.add(stackPane, j, i);
+//					GridPane.setHalignment(stackPane, HPos.CENTER);
+//				} else {
+//					StackPane stackPane = new StackPane();
+//					if (j == 0) {
+//						stackPane.getChildren().add(playerTotalLabel);
+//						GridPane.setHalignment(stackPane, HPos.LEFT);
+//					} else {
+//						stackPane.getChildren().add(bankerTotalLabel);
+//						GridPane.setHalignment(stackPane, HPos.RIGHT);
+//					}
+//					cardGrid.add(stackPane, j, i);
+//				}
+//			}
+//		}
+
+		Label outcomeLabel = new Label("________ wins \n Win or loss message here");
+		outcomeLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
+		HBox message = new HBox(10);
+		message.setAlignment(Pos.CENTER);
+		message.getChildren().add(outcomeLabel);
+
+		VBox midBox = new VBox(10);
+		midBox.setAlignment(Pos.TOP_CENTER);
+		midBox.setPadding(new Insets(10));
+		midBox.getChildren().addAll(centerBox, cardGrid, message);
+
+		layout.setCenter(midBox);
 
 		Button deal = new Button("DEAL");
-		deal.setPrefWidth(150);
-		deal.setPrefHeight(75);
-		//Button clear = new Button("Clear Board");
-		//clear.setPrefWidth(150);
-		//clear.setPrefHeight(75);
+		deal.setPrefSize(100, 35);
+		deal.setOnAction(event -> {
+			playerTot = 0;
+			bankerTot = 0;
+			theDealer.shuffleDeck();
+			playerHand = theDealer.dealHand();
+			bankerHand = theDealer.dealHand();
 
-		StackPane stackPane = new StackPane();
-		stackPane.getChildren().addAll(mv, deal);
-		//StackPane.setMargin(clear, new javafx.geometry.Insets(-475, 0, 0, -550));
-		StackPane.setMargin(deal, new javafx.geometry.Insets(-475, -550, 0, 0));
+//			playerTot = gameLogic.handTotal(playerHand);
+//			bankerTot = gameLogic.handTotal(bankerHand);
 
-		layout.setCenter(stackPane);
+			rounds.set(rounds.get() + 1);
+		});
+		Button playerB = new Button("Player");
+		playerB.setOnAction(event -> {
+			betOn = "Player";
+			//System.out.println(betOn);
+		});
+		Button dealerB = new Button("Banker");
+		dealerB.setOnAction(event -> {
+			betOn = "Banker";
+			//System.out.println(betOn);
+		});
+		Button tie = new Button("Tie");
+		tie.setOnAction(event -> {
+			betOn = "Tie";
+			//System.out.println(betOn);
+		});
+		playerB.setPrefSize(100, 50);
+		dealerB.setPrefSize(100, 50);
+		tie.setPrefSize(100, 50);
 
-		Scene scene = new Scene(layout, 1200, 690);
+		HBox buttonBox = new HBox(10);
+		buttonBox.setAlignment(Pos.CENTER);
+		buttonBox.getChildren().addAll(playerB, tie, dealerB);
+		botBox.getChildren().addAll(deal, buttonBox, betAmount);
+
+		layout.setBottom(botBox);
+
+		Scene scene = new Scene(layout, 800, 700);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
